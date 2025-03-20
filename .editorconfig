@@ -1,30 +1,17 @@
 root = true
 
 [*]
-indent_style = space
+indent_style = tab
 indent_size = 2
 end_of_line = lf
 charset = utf-8
 trim_trailing_whitespace = true
 insert_final_newline = true
 
-[.vscode/*.json]
-insert_final_newline = false
-
-[*.md]
-trim_trailing_whitespace = false
-
-[Makefile]
-indent_style = tab
-
-[*.mk]
-indent_style = tab
-
-[*.go]
-indent_style = tab
-
-[go.mod]
-indent_style = tab
-
-[.git*]
-indent_style = tab
+[nix/*]
+indent_style = unset
+indent_size = unset
+end_of_line = unset
+charset = unset
+trim_trailing_whitespace = unset
+insert_final_newline = unset
