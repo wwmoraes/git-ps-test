@@ -1,0 +1,37 @@
+#!/usr/bin/env sh
+
+set -eum
+
+echo "$(date --utc +%FT%T.%3NZ) starting"
+
+: "${SOURCE_BRANCH:=${1:-}}"
+: "${TARGET_BRANCH:=${2:-}}"
+: "${REMOTE_NAME:=${3:-$(git remote)}}"
+: "${REMOTE_URL:=${4:-$(git remote get-url "${REMOTE_NAME}")}}"
+
+: "${SOURCE_BRANCH:?must be set direcly or via \$1}"
+: "${TARGET_BRANCH:?must be set direcly or via \$2}"
+: "${REMOTE_NAME:?must be set direcly or via \$3}"
+: "${REMOTE_URL:?must be set direcly or via \$4}"
+
+: "${TITLE:=$(git log "${SOURCE_BRANCH}^..${SOURCE_BRANCH}" --pretty=format:%s)}"
+: "${DESCRIPTION:=$(git log "${SOURCE_BRANCH}^..${SOURCE_BRANCH}" --pretty=format:%b)}"
+
+if CLOSED=$(gh pr view \
+	--repo "${REMOTE_URL}" \
+	--json closed \
+	--jq '.closed' \
+	"${SOURCE_BRANCH}" \
+	2>/dev/null) && [ "${CLOSED}" != "true" ]; then
+	echo "An open PR was found for the branch, so exiting to prevent duplicate PR creation."
+	exit 0
+fi
+
+gh pr create \
+	--draft \
+	--title "${TITLE}" \
+	--body "${DESCRIPTION}" \
+	--base "${TARGET_BRANCH}" \
+	--head "${SOURCE_BRANCH}" \
+	--repo "${REMOTE_URL}" \
+	;

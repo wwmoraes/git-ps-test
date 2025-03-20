@@ -1,0 +1,38 @@
+#!/usr/bin/env sh
+
+set -eum
+
+exec 2>>.git-ps/logs/list_additional_information.log
+
+echo >&2 "$(date --utc +%FT%T.%3NZ) $(basename "$0") $*"
+
+: "${PATCH_INDEX:=${1:-}}"
+: "${PATCH_STATUS:=${2:-}}"
+: "${PATCH_COMMIT:=${3:-}}"
+: "${PATCH_TITLE:=${4:-}}"
+
+: "${PATCH_INDEX:?must be set direcly or via \$1}"
+: "${PATCH_STATUS:?must be set direcly or via \$2}"
+: "${PATCH_COMMIT:?must be set direcly or via \$3}"
+: "${PATCH_TITLE:?must be set direcly or via \$4}"
+
+echo >&2 "$(date --utc +%FT%T.%3NZ) pwd: ${PWD}"
+echo >&2 "$(date --utc +%FT%T.%3NZ) index: ${PATCH_INDEX}"
+echo >&2 "$(date --utc +%FT%T.%3NZ) status: ${PATCH_STATUS}"
+echo >&2 "$(date --utc +%FT%T.%3NZ) commit: ${PATCH_COMMIT}"
+echo >&2 "$(date --utc +%FT%T.%3NZ) title: ${PATCH_TITLE}"
+
+SLUG=$(echo "${PATCH_TITLE}" | tr ' ' '_' | tr ':' '_')
+
+echo >&2 "$(date --utc +%FT%T.%3NZ) slug: ${SLUG}"
+
+# TODO add head:<branch_name> to search
+
+# shellcheck disable=SC2016
+gh pr list \
+	--search "head:ps/rr/${SLUG}" \
+	--limit 1 \
+	--json state,comments,reviews \
+	--template \
+	'{{range .}}{{printf "%.1s" .state}} {{len .comments}} {{range .reviews}}{{if eq .state "APPROVED"}}${{end}}{{end}}{{end}}' \
+	;

@@ -12,7 +12,7 @@
 in mkShell {
 	packages = [
 		pkgs.editorconfig-checker
-		pkgs.git-ps-rs
+		pkgs.unstable.git-ps-rs
 	] ++ lib.optionals (builtins.getEnv "CI" != "") [ # CI-only
 	] ++ lib.optionals (builtins.getEnv "CI" == "") [ # local-only
 	];

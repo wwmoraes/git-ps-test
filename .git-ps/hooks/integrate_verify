@@ -1,0 +1,17 @@
+#!/usr/bin/env sh
+
+set -eum
+
+echo "$(date --utc +%FT%T.%3NZ) starting"
+
+: "${SOURCE_BRANCH:=${1:-}}"
+: "${TARGET_BRANCH:=${2:-}}"
+: "${REMOTE_NAME:=${3:-$(git remote)}}"
+: "${REMOTE_URL:=${4:-$(git remote get-url "${REMOTE_NAME}")}}"
+
+: "${SOURCE_BRANCH:?must be set direcly or via \$1}"
+: "${TARGET_BRANCH:?must be set direcly or via \$2}"
+: "${REMOTE_NAME:?must be set direcly or via \$3}"
+: "${REMOTE_URL:?must be set direcly or via \$4}"
+
+gh pr --repo "${REMOTE_URL}" checks "${SOURCE_BRANCH}"
