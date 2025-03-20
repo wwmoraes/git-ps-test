@@ -11,6 +11,7 @@
 	inherit (pkgs) lib mkShell;
 in mkShell {
 	packages = [
+		pkgs.editorconfig-checker
 		pkgs.git-ps-rs
 	] ++ lib.optionals (builtins.getEnv "CI" != "") [ # CI-only
 	] ++ lib.optionals (builtins.getEnv "CI" == "") [ # local-only
