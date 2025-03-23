@@ -22,7 +22,7 @@ echo >&2 "$(date --utc +%FT%T.%3NZ) status: ${PATCH_STATUS}"
 echo >&2 "$(date --utc +%FT%T.%3NZ) commit: ${PATCH_COMMIT}"
 echo >&2 "$(date --utc +%FT%T.%3NZ) title: ${PATCH_TITLE}"
 
-SLUG=$(echo "${PATCH_TITLE}" | tr ' ' '_' | tr ':' '_')
+SLUG=$(printf "%s" "${PATCH_TITLE}" | tr -C '[:alnum:]' '_')
 
 echo >&2 "$(date --utc +%FT%T.%3NZ) slug: ${SLUG}"
 
