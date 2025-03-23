@@ -6,15 +6,15 @@ verify_isolation = true
 
 [integrate]
 verify_isolation = true
-prompt_for_reassurance = true
-pull_after_integrate = false
+prompt_for_reassurance = false
+pull_after_integrate = true
 
 [fetch]
 show_upstream_patches_after_fetch = true
 
 [branch]
 verify_isolation = true
-push_to_remote = false
+push_to_remote = true
 
 [list]
 add_extra_patch_info = true

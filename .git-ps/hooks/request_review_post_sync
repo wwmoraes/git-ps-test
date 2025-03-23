@@ -30,8 +30,10 @@ fi
 gh pr create \
 	--draft \
 	--title "${TITLE}" \
-	--body "${DESCRIPTION}" \
 	--base "${TARGET_BRANCH}" \
 	--head "${SOURCE_BRANCH}" \
 	--repo "${REMOTE_URL}" \
+	--template .github/PULL_REQUEST_TEMPLATE/SEMANTIC.md \
+	--editor \
 	;
+	# --body "${DESCRIPTION}" \
