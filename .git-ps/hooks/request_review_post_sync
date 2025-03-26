@@ -2,8 +2,6 @@
 
 set -eum
 
-echo "$(date --utc +%FT%T.%3NZ) starting"
-
 : "${SOURCE_BRANCH:=${1:-}}"
 : "${TARGET_BRANCH:=${2:-}}"
 : "${REMOTE_NAME:=${3:-$(git remote)}}"
@@ -14,6 +12,7 @@ echo "$(date --utc +%FT%T.%3NZ) starting"
 : "${REMOTE_NAME:?must be set direcly or via \$3}"
 : "${REMOTE_URL:?must be set direcly or via \$4}"
 
+: "${ROOT:=$(git rev-parse --show-toplevel)}"
 : "${TITLE:=$(git log "${SOURCE_BRANCH}^..${SOURCE_BRANCH}" --pretty=format:%s)}"
 : "${DESCRIPTION:=$(git log "${SOURCE_BRANCH}^..${SOURCE_BRANCH}" --pretty=format:%b)}"
 
@@ -30,10 +29,11 @@ fi
 gh pr create \
 	--draft \
 	--title "${TITLE}" \
+	--body-file "${ROOT}/.github/PULL_REQUEST_TEMPLATE/SEMANTIC.md" \
 	--base "${TARGET_BRANCH}" \
 	--head "${SOURCE_BRANCH}" \
 	--repo "${REMOTE_URL}" \
-	--template .github/PULL_REQUEST_TEMPLATE/SEMANTIC.md \
 	--editor \
 	;
-	# --body "${DESCRIPTION}" \
+
+false
