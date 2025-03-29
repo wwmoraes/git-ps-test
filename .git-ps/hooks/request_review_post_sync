@@ -35,5 +35,3 @@ gh pr create \
 	--repo "${REMOTE_URL}" \
 	--editor \
 	;
-
-false
